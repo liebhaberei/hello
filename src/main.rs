@@ -15,7 +15,7 @@ fn main() {
 
     let pool = ThreadPool::new(4).unwrap();
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap_or_else(|e| {
             println!("Error: {}", e);
             process::exit(1);
@@ -27,6 +27,8 @@ fn main() {
             };
         });
     }
+
+    println!("Shutting down.");
 }
 
 fn handle_connection(mut stream: TcpStream) -> Result<(), Box<dyn std::error::Error>> {
